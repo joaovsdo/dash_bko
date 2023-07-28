@@ -38,13 +38,28 @@ class Headers:
             
 
     def getService(self) -> None:
+        try:
         # Mount a service that use the CREDENTIALS_PATH to autheticate google sheets api
-        self.service = build('sheets', 'v4', credentials=self.creds)
+            self.service = build('sheets', 'v4', credentials=self.creds)
+        except expression as identifier:
+            # If identifier gets a error must be on credentials object so we refresh her.
+            getCreds()
+        
+        finally:
+            # Finally we try to get service object again.
+            self.service = build('sheets', 'v4', credentials=self.creds)
         
     
     def getHeaders(self) -> List:
-        # Use the service obj tu access the HEADERS_SPREADSHEET_ID values from the RANGE
-        header_data = self.service.spreadsheets().values().get(
+        try:
+            # Use the service obj tu access the HEADERS_SPREADSHEET_ID values from the RANGE
+            header_data = self.service.spreadsheets().values().get(
+                spreadsheetId=self.sheet_id, range=self.range
+                ).execute().get('values', [])
+        except error as e:
+            getService()
+        finally:
+             header_data = self.service.spreadsheets().values().get(
                 spreadsheetId=self.sheet_id, range=self.range
                 ).execute().get('values', [])
 
