@@ -1,16 +1,20 @@
-import os.path 
+from __future__ import print_function
 
-from ../.config.py import SCOPES, HEADERS_SPREADSHEET_ID, HEADERS_RANGE, TOKEN_PATH, CREDENTIALS_PATH
+import os.path
 
-from google.auth.transport.requests import Requests
+from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from googleapiclient.erros import HttpError
+from googleapiclient.errors import HttpError
+
+from config import SCOPES, HEADERS_SPREADSHEET_ID, HEADERS_RANGE, TOKEN_PATH, CREDENTIALS_PATH
+
+#from googleapiclient.erros import HttpError
 
 class Headers:
     # Initiate class variables
-    def __init__(self, SCOPES, HEADERS_SPREADSHEET_ID, HEADERS_RANGE, TOKEN_PATH, CREDENTIALS_PATH):
+    def __init__(self):
         self.scopes = SCOPES
         self.sheet_id = HEADERS_SPREADSHEET_ID
         self.range = HEADERS_RANGE
@@ -50,7 +54,7 @@ class Headers:
             self.service = build('sheets', 'v4', credentials=self.creds)
         
     
-    def getHeaders(self) -> List:
+    def getHeaders(self):
         try:
             # Use the service obj tu access the HEADERS_SPREADSHEET_ID values from the RANGE
             header_data = self.service.spreadsheets().values().get(

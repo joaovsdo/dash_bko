@@ -1,2 +1,3 @@
 #system variables
-.config.py
+app/config.py
+app/__pycashe__
